@@ -4,18 +4,11 @@ var wire = new i2c(address, {device: '/dev/i2c-1'});
 
 var tempBlocking = 0xE3;
 
-wire.scan(function(err, data) {
-  console.log(data);
-});
-
 wire.write([tempBlocking], function(err) {
   if (err) {
     console.log(err);
     throw err;
   }
-
-  console.log('Wrote ', tempBlocking, ' to device');
-  console.log('Reading result');
 
   wire.read(3, function(err, res) {
     if (err) {
