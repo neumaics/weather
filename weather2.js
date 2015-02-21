@@ -21,7 +21,7 @@ function getTemp() {
           temperature = temperature & 0xFFFC;
 
           temperature = -46.85 + (175.72 * (temperature / 65536));
-          console.log(temperature);
+          console.log(temperature, Math.floor(new Date() / 1000));
         }
       });
     }, 50);
