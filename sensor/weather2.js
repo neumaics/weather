@@ -4,6 +4,10 @@ var wire = new i2c(address, {device: '/dev/i2c-1'});
 
 var tempBlocking = 0xE3;
 
+var Client = require('node-rest-client').Client;
+
+var client = new Client();
+
 function getTemp() {
   wire.write([tempBlocking], function(err) {
     if (err) {
@@ -21,10 +25,24 @@ function getTemp() {
           temperature = temperature & 0xFFFC;
 
           temperature = -46.85 + (175.72 * (temperature / 65536));
-          console.log(temperature, Math.floor(new Date() / 1000));
+
+          sendData(temperature);
         }
       });
     }, 50);
+  });
+}
+
+function sendData(value) {
+  var ts = new Date();
+
+  var args = {
+    data { value: value, ts.toISOString() },
+    headers:{"Content-Type": "application/json"}
+  };
+
+  client.post("http://192.168.1.239", args, function(data,response) {
+    console.log(response);
   });
 }
 

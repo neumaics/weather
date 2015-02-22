@@ -2,7 +2,10 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var config = require('./config/local')
+var config = require('./config/local');
+var moment = require('moment');
+
+var Entry = require('./models/entry');
 
 ////
 // Database setup
@@ -27,12 +30,21 @@ var router = express.Router();
 
 router.route('/temperature').
   post(function (req, res) {
-    console.log('POST');
-    res.send('Got a POST request');
+    var entry = new Entry();
+
+    entry.timestamp = moment.utc(req.body.timestamp);
+    entry.value = req.body.value;
+    entry.type = 'temperature';
+
+    entry.save(function(err, entry) {
+      if (err)
+        res.send(err);
+
+      res.json(entry);
+    });
   }).
 
   get(function(req, res) {
-    console.log('GET');
     res.send('Got a GET request');
   });
 
