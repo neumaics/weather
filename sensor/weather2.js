@@ -37,7 +37,7 @@ function sendData(value) {
   var ts = new Date();
 
   var args = {
-    data { value: value, ts.toISOString() },
+    data: { value: value, ts.toISOString() },
     headers:{"Content-Type": "application/json"}
   };
 
