@@ -41,9 +41,11 @@ function sendData(value) {
     headers:{"Content-Type": "application/json"}
   };
 
-  client.post("http://192.168.1.239", args, function(data,response) {
-    console.log(response);
-  });
+  client.post("http://192.168.1.239/api/temperature", args,
+    function(data,response) {
+      console.log(response);
+    }
+  );
 }
 
 setInterval(function(){
