@@ -11,10 +11,12 @@ var router = express.Router();
 
 router.route('/temperature').
   post(function (req, res) {
+    console.log('POST');
     res.send('Got a POST request');
   }).
 
   get(function(req, res) {
+    console.log('GET');
     res.send('Got a GET request');
   });
 
