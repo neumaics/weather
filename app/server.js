@@ -2,11 +2,27 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var config = require('./config/local')
 
+////
+// Database setup
+var mongoose = require('mongoose');
+var uri = 'mongodb://' +
+  '@' + config.mongo.host +
+  ':' + config.mongo.port +
+  '/' + config.mongo.database;
+
+var opts = { user: config.mongo.user };
+
+mongoose.connect(uri, opts);
+
+////
+//
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;
+////
+// Routes setup
 var router = express.Router();
 
 router.route('/temperature').
@@ -22,5 +38,10 @@ router.route('/temperature').
 
 app.use('/api', router);
 
+
+////
+//
+var port = process.env.PORT || 8080;
 app.listen(port);
-console.log('running on port ', port);
+
+console.log('running on port', port);
