@@ -4,7 +4,7 @@
   "description": "i2c weather",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sparkfun/HTU21D_Breakout"
+    "url": "https://github.com/neumaics/weather"
   },
   "dependencies": {
     "i2c-bus": "^0.11.0",
