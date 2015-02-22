@@ -9,12 +9,12 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 var router = express.Router();
 
-router.
-  post('/temperature', function (req, res) {
+router.route('/temperature').
+  post(function (req, res) {
     res.send('Got a POST request');
   }).
 
-  get('/temperature', function(req, res) {
+  get(function(req, res) {
     res.send('Got a GET request');
   });
 
