@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "i2c": "~0.1.8",
-    "i2c-bus": "^0.11.0",
     "node-rest-client": "^1.4.4"
   }
 }
