@@ -33,25 +33,32 @@ app.io.route('ready', function(req) {
   // req.io.broadcast('new visitor');
 });
 
-app.post('/api/temperature', function (req, res) {
-  var entry = new Entry();
+app.io.route('temperature', {
+  log: function(req) {
+    var entry = new Entry();
 
-  entry.timestamp = moment.utc(req.body.timestamp);
-  entry.value = req.body.value;
-  entry.type = 'temperature';
+    entry.timestamp = moment.utc(req.body.timestamp);
+    entry.value = req.body.value;
+    entry.type = 'temperature';
 
-  entry.save(function(err, entry) {
-    if (err)
-      res.send(err);
+    entry.save(function(err, entry) {
+      if (err)
+        res.send(err);
 
-    req.io.emit('update', {
-      timestamp: entry.timestamp,
-      value: entry.value,
-      type: entry.type
+      req.io.emit('update', {
+        timestamp: entry.timestamp,
+        value: entry.value,
+        type: entry.type
+      });
+
+      res.json(entry);
     });
 
-    res.json(entry);
-  });
+  }
+});
+
+app.post('/api/temperature', function (req, res) {
+  req.io.route('temperature:log');
 });
 
 app.get('/', function (req, res) {
