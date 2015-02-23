@@ -10,7 +10,7 @@
     <h3> Hello </h3>
 
     <div ng-controller="temperatureController">
-      <canvas id="line" class="chart chart-line" data="data"
+      <canvas id="line" class="chart chart-line" data="data" options="{animation: false, bezierCurve : false }"
         labels="labels" legend="true" series="series"
         click="onClick">
       </canvas>
