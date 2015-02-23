@@ -51,7 +51,7 @@ app.io.route('temperature', {
         type: entry.type
       });
 
-      res.json(entry);
+      // res.json(entry);
     });
 
   }
