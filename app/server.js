@@ -45,7 +45,7 @@ app.io.route('temperature', {
       if (err)
         res.send(err);
 
-      req.io.emit('update', {
+      req.io.broadcast('update', {
         timestamp: entry.timestamp,
         value: entry.value,
         type: entry.type
