@@ -9,7 +9,9 @@
         $scope.entries = [];
 
         socket.on('update', function(data) {
-          $scope.entries.push(data);
+          $scope.$apply(function() {
+            $scope.entries.push(data);
+          });
         });
       }]
     );
