@@ -4,8 +4,25 @@
     <title>Weather</title>
   </head>
 
-  <body>
+  <body ng-app="dash">
     <h3> Hello </h3>
+
+    <div ng-controller="temperatureController">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Temperature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="entry in entries">
+            <td>{{entry.timestamp}}</td>
+            <td>{{entry.value}}</td>
+          </tr>
+        </tbody>
+      <table>
+    </div>
 
     <!-- build:js -->
 

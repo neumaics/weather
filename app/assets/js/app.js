@@ -1,10 +1,16 @@
 (function(io) {
-  var socket = io();
+  var socket = io.connect();
 
   socket.emit('ready');
 
-  socket.on('update', function(data) {
-    console.log(data);
-  });
+  angular.module('dash', [])
+    .controller('temperatureController', ['$scope',
+      function($scope) {
+        $scope.entries = [];
 
+        socket.on('update', function(data) {
+          $scope.entries.push(data);
+        });
+      }]
+    );
 }(io));
