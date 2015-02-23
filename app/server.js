@@ -1,7 +1,6 @@
 // Server
-// var express = require('express.io')();
-//var app = http().io();
-var app = require('express.io')();
+var express = require('express.io');
+var app = express();
 app.http().io();
 
 var bodyParser = require('body-parser');
@@ -29,6 +28,11 @@ app.use(bodyParser.json());
 
 ////
 // Routes setup
+app.io.route('ready', function(req) {
+  console.log('hello');
+  // req.io.broadcast('new visitor');
+});
+
 app.post('/api/temperature', function (req, res) {
   var entry = new Entry();
 
@@ -54,6 +58,7 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
+app.use(express.static(__dirname + '/app'));
 
 ////
 //

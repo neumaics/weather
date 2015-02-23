@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var bower = require('gulp-bower');
 var concat = require('gulp-concat');
 var shell = require('gulp-shell');
+var htmlreplace = require('gulp-html-replace');
 
 gulp.task('bower', function() {
   return bower()
@@ -10,6 +11,14 @@ gulp.task('bower', function() {
 
 gulp.task('html', function() {
   return gulp.src('assets/*.html')
+    .pipe(htmlreplace({
+        'js': [
+          'assets/lib/angular/angular.js',
+          // 'assets/lib/socket.io-client/socket.io.js',
+          "/socket.io/socket.io.js",
+          'assets/js/app.js',
+        ]
+    }))
     .pipe(gulp.dest('build/'));
 });
 

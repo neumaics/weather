@@ -18,6 +18,7 @@
     "gulp": "^3.8.11",
     "gulp-bower": "0.0.10",
     "gulp-concat": "^2.5.2",
+    "gulp-html-replace": "^1.4.4",
     "gulp-shell": "^0.3.0"
   }
 }
