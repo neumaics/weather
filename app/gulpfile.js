@@ -16,6 +16,7 @@ gulp.task('html', function() {
           'assets/lib/angular/angular.js',
           // 'assets/lib/socket.io-client/socket.io.js',
           "/socket.io/socket.io.js",
+          "assets/lib/Chart.js/Chart.js",
           "assets/lib/angular-chart.js/dist/angular-chart.js",
           'assets/js/app.js',
         ],
