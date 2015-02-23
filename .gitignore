@@ -1,2 +1,7 @@
 node_modules
 app/config/local.js
+
+.DS_Store
+
+build
+bower_components
