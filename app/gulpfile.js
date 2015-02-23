@@ -16,11 +16,19 @@ gulp.task('html', function() {
           'assets/lib/angular/angular.js',
           // 'assets/lib/socket.io-client/socket.io.js',
           "/socket.io/socket.io.js",
+          "assets/lib/angular-chart.js/dist/angular-chart.js",
           'assets/js/app.js',
+        ],
+        'css': [
+          'assets/lib/angular-chart.js/dist/angular-chart.css'
         ]
     }))
     .pipe(gulp.dest('build/'));
 });
+
+gulp.task('css', function() {
+  return gulp.src('assets')
+})
 
 gulp.task('js', function() {
   return gulp.src('assets/**/*.js')

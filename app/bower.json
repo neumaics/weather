@@ -16,6 +16,9 @@
   ],
   "dependencies": {
     "angular": "~1.3.13",
-    "socket.io-client": "~1.3.4"
+    "socket.io-client": "~1.3.4",
+    "cubism": "~1.6.0",
+    "d3": "~3.5.5",
+    "angular-chart.js": "~0.5.1"
   }
 }

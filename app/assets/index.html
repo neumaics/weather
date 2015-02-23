@@ -2,13 +2,19 @@
 <html>
   <head>
     <title>Weather</title>
+    <!-- build:css -->
+    <!-- endbuild -->
   </head>
 
   <body ng-app="dash">
     <h3> Hello </h3>
 
     <div ng-controller="temperatureController">
-      <table>
+      <canvas id="line" class="chart chart-line" data="data"
+        labels="labels" legend="true" series="series"
+        click="onClick">
+      </canvas>
+      <!-- <table>
         <thead>
           <tr>
             <th>Time</th>
@@ -21,7 +27,7 @@
             <td>{{entry.value}}</td>
           </tr>
         </tbody>
-      <table>
+      <table> -->
     </div>
 
     <!-- build:js -->
