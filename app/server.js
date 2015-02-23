@@ -1,6 +1,9 @@
 // Server
-var express = require('express');
-var app = express();
+// var express = require('express.io')();
+//var app = http().io();
+var app = require('express.io')();
+app.http().io();
+
 var bodyParser = require('body-parser');
 var config = require('./config/local');
 var moment = require('moment');
@@ -26,29 +29,30 @@ app.use(bodyParser.json());
 
 ////
 // Routes setup
-var router = express.Router();
+app.post('/api/temperature', function (req, res) {
+  var entry = new Entry();
 
-router.route('/temperature').
-  post(function (req, res) {
-    var entry = new Entry();
+  entry.timestamp = moment.utc(req.body.timestamp);
+  entry.value = req.body.value;
+  entry.type = 'temperature';
 
-    entry.timestamp = moment.utc(req.body.timestamp);
-    entry.value = req.body.value;
-    entry.type = 'temperature';
+  entry.save(function(err, entry) {
+    if (err)
+      res.send(err);
 
-    entry.save(function(err, entry) {
-      if (err)
-        res.send(err);
-
-      res.json(entry);
+    req.io.emit('update', {
+      timestamp: entry.timestamp,
+      value: entry.value,
+      type: entry.type
     });
-  }).
 
-  get(function(req, res) {
-    res.send('Got a GET request');
+    res.json(entry);
   });
+});
 
-app.use('/api', router);
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
 
 
 ////
