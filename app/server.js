@@ -6,6 +6,7 @@ app.http().io();
 var bodyParser = require('body-parser');
 var config = require('./config/local');
 var moment = require('moment');
+var round = require('round');
 
 var Entry = require('./models/entry');
 
@@ -38,7 +39,7 @@ app.io.route('temperature', {
     var entry = new Entry();
 
     entry.timestamp = moment.utc(req.body.timestamp);
-    entry.value = req.body.value;
+    entry.value = round(req.body.value, 0.05);
     entry.type = 'temperature';
 
     entry.save(function(err, entry) {
