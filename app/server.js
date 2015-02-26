@@ -31,30 +31,41 @@ app.use(bodyParser.json());
 // Routes setup
 app.io.route('ready', function(req) {
   console.log('hello');
-  // req.io.broadcast('new visitor');
 });
 
 app.io.route('temperature', {
   log: function(req) {
-    var entry = new Entry();
+    var utc = moment.utc(req.body.timestamp);
+    var second = utc.second();
+    var minute = utc.minute();
+    var docTs = utc.millisecond(0).second(0).minute(0);
 
-    entry.timestamp = moment.utc(req.body.timestamp);
-    entry.value = round(req.body.value, 0.05);
-    entry.type = 'temperature';
+    var query = Entry.findOne({ timestamp: docTs }, function(err, entry) {
+      if (err) throw err;
 
-    entry.save(function(err, entry) {
-      if (err)
-        res.send(err);
+      if(entry) {
+        var value = round(req.body.value, 0.005);
 
-      req.io.broadcast('update', {
-        timestamp: entry.timestamp,
-        value: entry.value,
-        type: entry.type
-      });
+        entry.set('values.' + minute + '.' + second, value);
 
-      req.io.respond();
+        entry.save(function(err, entry) {
+          if (err) throw err;
+          console.log(entry.values[minute][second]);
+          console.log(minute, second);
+        });
+      } else {
+        var e = Entry.getBlank(docTs, 'temperature');
+        e.values[minute][second] = round(req.body.value, 0.005);
+
+        var newEntry = new Entry(e);
+
+        newEntry.save(function(err, entry) {
+          if (err) throw err;
+        });
+      }
     });
 
+    req.io.respond();
   }
 });
 
