@@ -39,27 +39,31 @@ app.io.route('temperature', {
     var second = utc.second();
     var minute = utc.minute();
     var docTs = utc.millisecond(0).second(0).minute(0);
+    var value = round(req.body.value, 0.005);
 
     var query = Entry.findOne({ timestamp: docTs }, function(err, entry) {
       if (err) throw err;
 
       if(entry) {
-        var value = round(req.body.value, 0.005);
-
         entry.set('values.' + minute + '.' + second, value);
 
-        var newSamples = entry.samples + 1;
-        entry.set('samples', entry.samples + 1);
+        var newHourSamples = entry.samples + 1;
+        entry.set('samples', newHourSamples);
 
-        var newAverage = (entry.average + value) / newSamples;
-        entry.set('average', round(newAverage));
+        var newHourAverage = (entry.average + value) / newSamples;
+        entry.set('average', round(newHourAverage, 0.005));
+
+        var newMinuteSamples = entry.values[minute].samples + 1;
+        entry.set('values.' + minute + '.samples', newMinuteSamples);
+
+        var newMinuteAverage = (entry.values[minute].average + value) / newMinuteSamples;
+        entry.set('values.' + minute + '.average', round(newMinuteAverage, 0.005));
 
         entry.save(function(err, entry) {
           if (err) throw err;
         });
       } else {
         var e = Entry.getBlank(docTs, 'temperature');
-        var value = round(req.body.value, 0.005);
         e.values[minute][second] = value;
         e.samples = 1;
         e.average = value;
