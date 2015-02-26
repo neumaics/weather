@@ -50,7 +50,7 @@ app.io.route('temperature', {
         var newHourSamples = entry.samples + 1;
         entry.set('samples', newHourSamples);
 
-        var newHourAverage = (entry.average + value) / newSamples;
+        var newHourAverage = (entry.average + value) / newHourSamples;
         entry.set('average', round(newHourAverage, 0.005));
 
         var newMinuteSamples = entry.values[minute].samples + 1;
