@@ -5,8 +5,8 @@ var EntrySchema = new Schema({
   timestamp: Date,
   values: { },
   type: String,
-  num_entries: Number,
-  sum_entries: Number
+  samples: Number,
+  average: Number
 });
 
 EntrySchema.statics.getBlank = function (timestamp, type) {
@@ -14,14 +14,15 @@ EntrySchema.statics.getBlank = function (timestamp, type) {
     timestamp: timestamp,
     values: this.minuteList(),
     type: type,
-    num_entries: 0,
-    sum_entries: 0
+    samples: 0,
+    average: 0
   }
 }
 
 EntrySchema.statics.minuteList = function()  {
   var ret = {
-    sum: 0
+    samples: 0,
+    average: 0
   }
 
   for (var i = 0; i < 60; i++) {
