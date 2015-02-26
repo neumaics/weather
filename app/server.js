@@ -56,8 +56,12 @@ app.io.route('temperature', {
         var newMinuteSamples = entry.values[minute].samples + 1;
         entry.set('values.' + minute + '.samples', newMinuteSamples);
 
-        var newMinuteAverage = (entry.values[minute].average + value) / 2;
-        entry.set('values.' + minute + '.average', round(newMinuteAverage, 0.005));
+        if (newMinuteSamples === 1) {
+          entry.set('values.' + minute + '.average', value);
+        } else {
+          var newMinuteAverage = (entry.values[minute].average + value) / 2;
+          entry.set('values.' + minute + '.average', round(newMinuteAverage, 0.005));
+        }
 
         entry.save(function(err, entry) {
           if (err) throw err;

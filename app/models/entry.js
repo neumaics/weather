@@ -20,10 +20,7 @@ EntrySchema.statics.getBlank = function (timestamp, type) {
 }
 
 EntrySchema.statics.minuteList = function()  {
-  var ret = {
-    samples: 0,
-    average: 0
-  }
+  var ret = { };
 
   for (var i = 0; i < 60; i++) {
     ret[i] = this.secondList();
@@ -34,8 +31,9 @@ EntrySchema.statics.minuteList = function()  {
 
 EntrySchema.statics.secondList = function() {
   var ret = {
-    sum: 0
-  }
+    samples: 0,
+    average: 0
+  };
 
   for (var i = 0; i < 60; i++) {
     ret[i] = null;
