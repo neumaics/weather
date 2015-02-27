@@ -91,7 +91,16 @@ app.io.route('temperature', {
     req.io.respond();
   },
   hour: function(req) {
-    req.io.respond();
+    var from = req.data.from;
+    var to = req.data.to;
+
+    Entry.find({ type: 'temperature', timestamp: { $lte: from, $gte: to }}, function(err, entries) {
+      if (err) {
+        req.io.emit(err);
+      }
+
+      req.io.respond(entries);
+    });
   }
 });
 
@@ -108,7 +117,44 @@ app.get('/api/temperature', function(req, res) {
     case 'hour':
       req.io.route('temperature:hour'); break;
   }
-})
+});
+
+app.get('/api/temperature/hour/', function (req, res) {
+  Entry.find()
+    .where('type').equals('temperature')
+    .where('timestamp')
+    .gte(req.query.from)
+    .lte(req.query.to || new Date())
+    .exec(function(err, entries) {
+      if (err) { res.send(err); }
+
+      res.send(entries.map(
+        function (ele) {
+          return {
+            timestamp: ele.timestamp,
+            value: ele.average
+          };
+        }
+      ));
+    });
+});
+
+app.get('/api/temperature/minute/', function(req, res) {
+  Entry.find()
+    .where('type').equals('temperature')
+    .where('timestamp')
+    .gte(req.query.from)
+    .lte(req.query.to || new Date())
+    .exec(function(err, entries) {
+      if (err) { res.send(err); }
+
+      res.send(entries);
+    });
+});
+
+app.get('/api/temperature/second/', function(req, res) {
+  res.send('not implemented');
+});
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
