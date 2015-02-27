@@ -83,12 +83,32 @@ app.io.route('temperature', {
     });
 
     req.io.respond();
+  },
+  second: function(req) {
+    req.io.respond();
+  },
+  minute: function(req) {
+    req.io.respond();
+  },
+  hour: function(req) {
+    req.io.respond();
   }
 });
 
 app.post('/api/temperature', function (req, res) {
   req.io.route('temperature:log');
 });
+
+app.get('/api/temperature', function(req, res) {
+  switch (req.body.resolution) {
+    case 'second':
+      req.io.route('temperature:second'); break;
+    case 'minute':
+      req.io.route('temperature:minute'); break;
+    case 'hour':
+      req.io.route('temperature:hour'); break;
+  }
+})
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
