@@ -50,4 +50,4 @@ function sendData(value) {
 
 setInterval(function(){
   getTemp();
-}, 1000);
+}, 950);

@@ -140,20 +140,37 @@ app.get('/api/temperature/hour/', function (req, res) {
 });
 
 app.get('/api/temperature/minute/', function(req, res) {
-  Entry.find()
-    .where('type').equals('temperature')
-    .where('timestamp')
-    .gte(req.query.from)
-    .lte(req.query.to || new Date())
-    .exec(function(err, entries) {
-      if (err) { res.send(err); }
+  var o = {
+    query: { timestamp: { $gte: new Date(req.query.from), $lte: new Date(req.query.to) }},
+    map: function () { emit(this.timestamp, {
+      average: this.average,
+      values: this.values
+    }) },
+    reduce: function (k, vals) { return vals.values.length },
+    finalize: function(k, reducedVal) {
+      var vals = [];
 
-      res.send(entries);
-    });
+      for (var key in reducedVal.values) {
+        vals.push({ m: key, value: reducedVal.values[key].average});
+      }
+
+      return {
+        timestamp: k,
+        values: vals
+      };
+    }
+  };
+
+  Entry.mapReduce(o, function(err, results) {
+    if (err) { res.send(err) }
+    else { res.send(results.map(function (e) {
+      return { timestamp: e.value.timestamp, values: e.value.values };
+    })); }
+  })
 });
 
 app.get('/api/temperature/second/', function(req, res) {
-  res.send('not implemented');
+
 });
 
 app.get('/', function (req, res) {
